@@ -1,4 +1,4 @@
-package htmllinkparser
+package main
 
 import (
 	"fmt"
@@ -20,8 +20,15 @@ func exit(msg string) {
 
 func f(n *html.Node, a *[]Link) {
 	if n.Type == html.ElementNode && n.Data == "a" {
+		var attr string
+		for _, att := range n.Attr {
+			if att.Key == "href" {
+				attr = att.Val
+			}
+		}
+		fmt.Println(n.Attr[0].Key)
 		newLink := Link{
-			Href: n.Attr[0].Val,
+			Href: attr,
 			Text: n.FirstChild.Data,
 		}
 		*a = append(*a, newLink)
@@ -39,4 +46,13 @@ func ParseLinks(r io.Reader) []Link {
 	var arr []Link
 	f(doc, &arr)
 	return arr
+}
+
+func main() {
+	file, err := os.Open("html/ex2.html")
+	if err != nil {
+		exit("err opening the file")
+	}
+	links := ParseLinks(file)
+	fmt.Println(links)
 }

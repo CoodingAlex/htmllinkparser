@@ -1,15 +1,11 @@
 package htmllinkparser
 
 import (
-	"flag"
 	"fmt"
+	"io"
 	"os"
 
 	"golang.org/x/net/html"
-)
-
-var (
-	htmlFile = flag.String("html", "html/ex1.html", "the route for the html file")
 )
 
 type Link struct {
@@ -21,6 +17,7 @@ func exit(msg string) {
 	fmt.Println(msg)
 	os.Exit(1)
 }
+
 func f(n *html.Node, a *[]Link) {
 	if n.Type == html.ElementNode && n.Data == "a" {
 		newLink := Link{
@@ -34,18 +31,12 @@ func f(n *html.Node, a *[]Link) {
 	}
 }
 
-func main() {
-	flag.Parse()
-	file, err := os.Open(*htmlFile)
+func ParseLinks(r io.Reader) []Link {
+	doc, err := html.Parse(r)
 	if err != nil {
-		exit("Error opening the file")
-	}
-
-	doc, err := html.Parse(file)
-	if err != nil {
-		exit("Error opening the file")
+		exit("Error parsing the file")
 	}
 	var arr []Link
 	f(doc, &arr)
-	fmt.Println(arr)
+	return arr
 }

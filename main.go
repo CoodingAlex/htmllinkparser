@@ -1,4 +1,4 @@
-package main
+package htmllinkparser
 
 import (
 	"fmt"
@@ -48,11 +48,11 @@ func ParseLinks(r io.Reader) []Link {
 	return arr
 }
 
-func main() {
-	file, err := os.Open("html/ex2.html")
-	if err != nil {
-		exit("err opening the file")
-	}
-	links := ParseLinks(file)
-	fmt.Println(links)
-}
+// func main() {
+// 	file, err := os.Open("html/ex2.html")
+// 	if err != nil {
+// 		exit("err opening the file")
+// 	}
+// 	links := ParseLinks(file)
+// 	fmt.Println(links)
+// }
